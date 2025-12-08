@@ -1,0 +1,17 @@
+[
+  {
+    "customer_id": "CUST_F_001",
+    "name": "Aditi",
+    "gender": "female",
+    "loyalty_tier": "silver",
+    "preferences": {
+      "styles": ["minimal", "clean"],
+      "favorite_colors": ["white", "beige"],
+      "occasions": ["college", "casual"]
+    },
+    "purchase_history": [
+      "TSHIRT_WHT_RELAXED_01",
+      "SNEAKER_WHT_CLASSIC_01"
+    ]
+  }
+]
