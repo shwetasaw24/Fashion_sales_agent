@@ -1,0 +1,38 @@
+[
+  {
+    "sku": "TSHIRT_WHT_RELAXED_01",
+    "store_id": "STORE_BLR_ORION",
+    "size": "S",
+    "quantity": 12
+  },
+  {
+    "sku": "TSHIRT_WHT_RELAXED_01",
+    "store_id": "STORE_BLR_ORION",
+    "size": "M",
+    "quantity": 5
+  },
+  {
+    "sku": "JEANS_BLUE_MOMFIT_01",
+    "store_id": "STORE_BLR_ORION",
+    "size": "30",
+    "quantity": 3
+  },
+  {
+    "sku": "SNEAKER_WHT_CLASSIC_01",
+    "store_id": "STORE_BLR_ORION",
+    "size": "7",
+    "quantity": 10
+  },
+  {
+    "sku": "BAG_TOTE_CANVAS_01",
+    "store_id": "STORE_BLR_ORION",
+    "size": "standard",
+    "quantity": 20
+  },
+  {
+    "sku": "HOODIE_BLK_OVERSIZED_01",
+    "store_id": "STORE_BLR_ORION",
+    "size": "M",
+    "quantity": 7
+  }
+]
