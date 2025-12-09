@@ -1,0 +1,53 @@
+[
+  {
+    "session_id": "SESSION_001",
+    "customer_id": "CUST_F_001",
+    "current_channel": "mobile_app",
+    "active_cart_id": "CART_001",
+    "context_state": {
+      "intent": "browse_running_shoes",
+      "filters": {
+        "category": "Footwear",
+        "sub_category": "Sneakers",
+        "max_price": 2500,
+        "color": "White"
+      },
+      "selected_items": [
+        {
+          "sku": "SNEAKERS_CHUNKY_WHT_01",
+          "size": "38",
+          "qty": 1
+        }
+      ]
+    },
+    "last_message": "Show me white sneakers under 2500",
+    "last_updated_at": "2025-12-07T17:42:30Z"
+  },
+  {
+    "session_id": "SESSION_002",
+    "customer_id": "CUST_F_003",
+    "current_channel": "kiosk",
+    "active_cart_id": "CART_002",
+    "context_state": {
+      "intent": "complete_outfit",
+      "anchor_products": [
+        {
+          "sku": "JEANS_SKINNY_DKBLU_01",
+          "role": "bottom"
+        }
+      ],
+      "proposed_bundle": [
+        {
+          "sku": "TSHIRT_OVERSIZE_GRPH_01",
+          "role": "top"
+        },
+        {
+          "sku": "SNEAKERS_CHUNKY_BGE_01",
+          "role": "footwear"
+        }
+      ]
+    },
+    "last_message": "Continue outfit from my phone",
+    "last_updated_at": "2025-12-07T16:10:00Z"
+  }
+]

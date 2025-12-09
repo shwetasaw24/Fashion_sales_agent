@@ -1,1 +1,26 @@
-[]
+[
+  {
+    "payment_id": "PAY_9001",
+    "order_id": "ORDER_1001",
+    "customer_id": "CUST_F_001",
+    "amount": 2124,
+    "currency": "INR",
+    "status": "captured",
+    "method": "UPI",
+    "gateway_reference": "FAKEUPIUTR12345",
+    "failure_reason": null,
+    "created_at": "2025-12-07T17:49:00Z"
+  },
+  {
+    "payment_id": "PAY_9002",
+    "order_id": "ORDER_1002",
+    "customer_id": "CUST_F_005",
+    "amount": 1039,
+    "currency": "INR",
+    "status": "captured",
+    "method": "card",
+    "gateway_reference": "CARDREF56789",
+    "failure_reason": null,
+    "created_at": "2025-12-06T13:04:00Z"
+  }
+]

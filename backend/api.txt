@@ -1,0 +1,36 @@
+| API                    | Method | Description             | Example URL                                                                                                          |
+| ---------------------- | ------ | ----------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Get all products       | GET    | returns full catalog    | [http://127.0.0.1:8080/api/products](http://127.0.0.1:8080/api/products)                                             |
+| Filter by category     | GET    | filter by category      | [http://127.0.0.1:8080/api/products?category=apparel](http://127.0.0.1:8080/api/products?category=apparel)           |
+| Filter by sub-category | GET    | t-shirts, dresses, etc. | [http://127.0.0.1:8080/api/products?sub_category=t-shirt](http://127.0.0.1:8080/api/products?sub_category=t-shirt)   |
+| Filter by max price    | GET    | <= price                | [http://127.0.0.1:8080/api/products?max_price=2000](http://127.0.0.1:8080/api/products?max_price=2000)               |
+| Filter by color        | GET    | filter by base_color    | [http://127.0.0.1:8080/api/products?color=white](http://127.0.0.1:8080/api/products?color=white)                     |
+| Get product by SKU     | GET    | find single product     | [http://127.0.0.1:8080/api/products/TSHIRT_WHT_RELAXED_01](http://127.0.0.1:8080/api/products/TSHIRT_WHT_RELAXED_01) |
+
+| API            | Method | Example URL                                                                                  |
+| -------------- | ------ | -------------------------------------------------------------------------------------------- |
+| List customers | GET    | [http://127.0.0.1:8080/api/customers](http://127.0.0.1:8080/api/customers)                   |
+| Get a customer | GET    | [http://127.0.0.1:8080/api/customers/CUST_001](http://127.0.0.1:8080/api/customers/CUST_001) |
+
+| API        | Method | Description                | Example                                                                                |
+| ---------- | ------ | -------------------------- | -------------------------------------------------------------------------------------- |
+| Basic recs | POST   | recommend based on filters | [http://127.0.0.1:8080/api/recommendations](http://127.0.0.1:8080/api/recommendations) |
+
+| API                          | Method | Example URL                                                                        |
+| ---------------------------- | ------ | ---------------------------------------------------------------------------------- |
+| Price + promo + points quote | POST   | [http://127.0.0.1:8080/api/loyalty/quote](http://127.0.0.1:8080/api/loyalty/quote) |
+
+| API                    | Method | Example URL                                                                                        |
+| ---------------------- | ------ | -------------------------------------------------------------------------------------------------- |
+| List all orders        | GET    | [http://127.0.0.1:8080/api/orders](http://127.0.0.1:8080/api/orders)                               |
+| Get a specific order   | GET    | [http://127.0.0.1:8080/api/orders/ORD_1001](http://127.0.0.1:8080/api/orders/ORD_1001)             |
+| Get items for an order | GET    | [http://127.0.0.1:8080/api/orders/ORD_1001/items](http://127.0.0.1:8080/api/orders/ORD_1001/items) |
+
+| API               | Method | Example URL                                                                                |
+| ----------------- | ------ | ------------------------------------------------------------------------------------------ |
+| List all payments | GET    | [http://127.0.0.1:8080/api/payments](http://127.0.0.1:8080/api/payments)                   |
+| Get payment       | GET    | [http://127.0.0.1:8080/api/payments/PAY_8001](http://127.0.0.1:8080/api/payments/PAY_8001) |
+
+| API                         | Method | Example URL                                                          |
+| --------------------------- | ------ | -------------------------------------------------------------------- |
+| All browsing history events | GET    | [http://127.0.0.1:8080/api/events](http://127.0.0.1:8080/api/events) |
