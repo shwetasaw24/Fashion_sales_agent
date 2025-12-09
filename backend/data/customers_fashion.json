@@ -1,17 +1,107 @@
 [
   {
     "customer_id": "CUST_F_001",
-    "name": "Aditi",
-    "gender": "female",
-    "loyalty_tier": "silver",
-    "preferences": {
-      "styles": ["minimal", "clean"],
-      "favorite_colors": ["white", "beige"],
-      "occasions": ["college", "casual"]
+    "name": "Shreya Nair",
+    "email": "shreya.nair@example.com",
+    "phone": "+91-9876543210",
+    "city": "Bengaluru",
+    "preferred_store_id": "STORE_BLR_ORION",
+    "loyalty_tier": "Gold",
+    "loyalty_points": 3120,
+    "device_preferences": ["mobile_app", "whatsapp"],
+    "primary_style": "athleisure",
+    "preferred_occasion_focus": ["College", "Casual"],
+    "color_preferences": ["Black", "White", "Pastels"],
+    "size_profile": {
+      "tops_size": "M",
+      "bottoms_size": "30",
+      "footwear_size": "38"
     },
-    "purchase_history": [
-      "TSHIRT_WHT_RELAXED_01",
-      "SNEAKER_WHT_CLASSIC_01"
-    ]
+    "channel_last_seen": "mobile_app",
+    "last_active_at": "2025-12-07T18:05:00Z"
+  },
+  {
+    "customer_id": "CUST_F_002",
+    "name": "Rahul Mehta",
+    "email": "rahul.mehta@example.com",
+    "phone": "+91-9988776655",
+    "city": "Mumbai",
+    "preferred_store_id": "STORE_MUMBAI_PHOENIX",
+    "loyalty_tier": "Silver",
+    "loyalty_points": 980,
+    "device_preferences": ["web", "kiosk"],
+    "primary_style": "formal",
+    "preferred_occasion_focus": ["Office"],
+    "color_preferences": ["Blue", "White"],
+    "size_profile": {
+      "tops_size": "40",
+      "bottoms_size": "32",
+      "footwear_size": "42"
+    },
+    "channel_last_seen": "web",
+    "last_active_at": "2025-12-07T10:30:00Z"
+  },
+  {
+    "customer_id": "CUST_F_003",
+    "name": "Aditi Sharma",
+    "email": "aditi.sharma@example.com",
+    "phone": "+91-9765432109",
+    "city": "Delhi",
+    "preferred_store_id": "STORE_DELHI_CP",
+    "loyalty_tier": "Bronze",
+    "loyalty_points": 450,
+    "device_preferences": ["mobile_app"],
+    "primary_style": "streetwear",
+    "preferred_occasion_focus": ["College", "Party"],
+    "color_preferences": ["Black", "Red"],
+    "size_profile": {
+      "tops_size": "S",
+      "bottoms_size": "28",
+      "footwear_size": "37"
+    },
+    "channel_last_seen": "mobile_app",
+    "last_active_at": "2025-12-06T19:15:00Z"
+  },
+  {
+    "customer_id": "CUST_F_004",
+    "name": "Imran Khan",
+    "email": "imran.khan@example.com",
+    "phone": "+91-9090909090",
+    "city": "Delhi",
+    "preferred_store_id": "STORE_DELHI_CP",
+    "loyalty_tier": "Platinum",
+    "loyalty_points": 8450,
+    "device_preferences": ["mobile_app", "voice_assistant"],
+    "primary_style": "minimal",
+    "preferred_occasion_focus": ["Office", "Casual"],
+    "color_preferences": ["Blue", "Grey", "Black"],
+    "size_profile": {
+      "tops_size": "40",
+      "bottoms_size": "32",
+      "footwear_size": "43"
+    },
+    "channel_last_seen": "voice_assistant",
+    "last_active_at": "2025-12-07T08:40:00Z"
+  },
+  {
+    "customer_id": "CUST_F_005",
+    "name": "Priya Deshpande",
+    "email": "priya.deshpande@example.com",
+    "phone": "+91-9123456780",
+    "city": "Pune",
+    "preferred_store_id": "STORE_ONLINE_ONLY",
+    "loyalty_tier": "Silver",
+    "loyalty_points": 1600,
+    "device_preferences": ["web"],
+    "primary_style": "ethnic",
+    "preferred_occasion_focus": ["Festive"],
+    "color_preferences": ["Yellow", "Pink"],
+    "size_profile": {
+      "tops_size": "M",
+      "bottoms_size": "30",
+      "footwear_size": "38"
+    },
+    "channel_last_seen": "web",
+    "last_active_at": "2025-12-07T21:05:00Z"
   }
 ]

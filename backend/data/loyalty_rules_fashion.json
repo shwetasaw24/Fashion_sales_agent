@@ -1,11 +1,26 @@
-{
-  "basic": {
-    "discount_percent": 5
+[
+  {
+    "tier": "Bronze",
+    "points_per_rupee": 0.25,
+    "min_points_to_redeem": 500,
+    "max_discount_percent_via_points": 5
   },
-  "silver": {
-    "discount_percent": 10
+  {
+    "tier": "Silver",
+    "points_per_rupee": 0.5,
+    "min_points_to_redeem": 400,
+    "max_discount_percent_via_points": 7
   },
-  "gold": {
-    "discount_percent": 15
+  {
+    "tier": "Gold",
+    "points_per_rupee": 0.75,
+    "min_points_to_redeem": 300,
+    "max_discount_percent_via_points": 10
+  },
+  {
+    "tier": "Platinum",
+    "points_per_rupee": 1,
+    "min_points_to_redeem": 200,
+    "max_discount_percent_via_points": 15
   }
-}
+]

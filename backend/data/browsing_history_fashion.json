@@ -1,0 +1,83 @@
+[
+  {
+    "event_id": "EVT_1001",
+    "customer_id": "CUST_F_001",
+    "channel": "mobile_app",
+    "event_type": "search",
+    "sku": null,
+    "search_query": "white sneakers under 2500",
+    "timestamp": "2025-12-07T17:40:00Z"
+  },
+  {
+    "event_id": "EVT_1002",
+    "customer_id": "CUST_F_001",
+    "channel": "mobile_app",
+    "event_type": "view_product",
+    "sku": "SNEAKERS_CHUNKY_WHT_01",
+    "search_query": null,
+    "timestamp": "2025-12-07T17:41:00Z"
+  },
+  {
+    "event_id": "EVT_1003",
+    "customer_id": "CUST_F_001",
+    "channel": "mobile_app",
+    "event_type": "add_to_cart",
+    "sku": "SNEAKERS_CHUNKY_WHT_01",
+    "search_query": null,
+    "timestamp": "2025-12-07T17:42:00Z"
+  },
+  {
+    "event_id": "EVT_1004",
+    "customer_id": "CUST_F_002",
+    "channel": "web",
+    "event_type": "search",
+    "sku": null,
+    "search_query": "formal blue shirt",
+    "timestamp": "2025-12-06T09:10:00Z"
+  },
+  {
+    "event_id": "EVT_1005",
+    "customer_id": "CUST_F_002",
+    "channel": "web",
+    "event_type": "view_product",
+    "sku": "SHIRT_SOLID_BLUE_01",
+    "search_query": null,
+    "timestamp": "2025-12-06T09:11:00Z"
+  },
+  {
+    "event_id": "EVT_1006",
+    "customer_id": "CUST_F_003",
+    "channel": "mobile_app",
+    "event_type": "view_product",
+    "sku": "TSHIRT_OVERSIZE_GRPH_01",
+    "search_query": null,
+    "timestamp": "2025-12-05T18:20:00Z"
+  },
+  {
+    "event_id": "EVT_1007",
+    "customer_id": "CUST_F_003",
+    "channel": "mobile_app",
+    "event_type": "view_product",
+    "sku": "JEANS_SKINNY_DKBLU_01",
+    "search_query": null,
+    "timestamp": "2025-12-05T18:22:00Z"
+  },
+  {
+    "event_id": "EVT_1008",
+    "customer_id": "CUST_F_005",
+    "channel": "web",
+    "event_type": "search",
+    "sku": null,
+    "search_query": "yellow kurta festive",
+    "timestamp": "2025-12-04T12:30:00Z"
+  },
+  {
+    "event_id": "EVT_1009",
+    "customer_id": "CUST_F_005",
+    "channel": "web",
+    "event_type": "view_product",
+    "sku": "KURTA_ETHNIC_YLW_01",
+    "search_query": null,
+    "timestamp": "2025-12-04T12:31:00Z"
+  }
+]

@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "order_item_id": "OI_1001_1",
+    "order_id": "ORDER_1001",
+    "sku": "SNEAKERS_CHUNKY_WHT_01",
+    "quantity": 1,
+    "unit_price": 2499,
+    "final_price": 2124
+  },
+  {
+    "order_item_id": "OI_1002_1",
+    "order_id": "ORDER_1002",
+    "sku": "KURTA_ETHNIC_YLW_01",
+    "quantity": 1,
+    "unit_price": 1299,
+    "final_price": 1039
+  }
+]

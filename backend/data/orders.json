@@ -1,1 +1,36 @@
-[]
+[
+  {
+    "order_id": "ORDER_1001",
+    "customer_id": "CUST_F_001",
+    "channel": "mobile_app",
+    "order_type": "reserve_in_store",
+    "store_id": "STORE_BLR_ORION",
+    "order_status": "ready_for_pickup",
+    "payment_status": "paid",
+    "payment_method": "UPI",
+    "total_amount": 2124,
+    "currency": "INR",
+    "discount_amount": 375,
+    "loyalty_points_used": 1000,
+    "loyalty_points_earned": 42,
+    "created_at": "2025-12-07T17:50:00Z",
+    "updated_at": "2025-12-07T18:10:00Z"
+  },
+  {
+    "order_id": "ORDER_1002",
+    "customer_id": "CUST_F_005",
+    "channel": "web",
+    "order_type": "ship_to_home",
+    "store_id": "STORE_ONLINE_ONLY",
+    "order_status": "shipped",
+    "payment_status": "paid",
+    "payment_method": "card",
+    "total_amount": 1299,
+    "currency": "INR",
+    "discount_amount": 260,
+    "loyalty_points_used": 500,
+    "loyalty_points_earned": 26,
+    "created_at": "2025-12-06T13:05:00Z",
+    "updated_at": "2025-12-06T14:30:00Z"
+  }
+]

@@ -1,38 +1,98 @@
 [
   {
-    "sku": "TSHIRT_WHT_RELAXED_01",
+    "sku": "SNEAKERS_CHUNKY_WHT_01",
+    "store_id": "ONLINE",
+    "store_name": "Online DC",
+    "store_type": "online",
+    "quantity_available": 80,
+    "last_updated": "2025-12-07T10:00:00Z"
+  },
+  {
+    "sku": "SNEAKERS_CHUNKY_WHT_01",
     "store_id": "STORE_BLR_ORION",
-    "size": "S",
-    "quantity": 12
+    "store_name": "Bengaluru Orion Mall",
+    "store_type": "physical",
+    "quantity_available": 6,
+    "last_updated": "2025-12-07T09:50:00Z"
+  },
+  {
+    "sku": "SNEAKERS_CHUNKY_WHT_01",
+    "store_id": "STORE_DELHI_CP",
+    "store_name": "Delhi Connaught Place",
+    "store_type": "physical",
+    "quantity_available": 3,
+    "last_updated": "2025-12-07T09:55:00Z"
+  },
+  {
+    "sku": "JEANS_MOM_BLUE_01",
+    "store_id": "ONLINE",
+    "store_name": "Online DC",
+    "store_type": "online",
+    "quantity_available": 40,
+    "last_updated": "2025-12-07T09:40:00Z"
+  },
+  {
+    "sku": "JEANS_MOM_BLUE_01",
+    "store_id": "STORE_BLR_ORION",
+    "store_name": "Bengaluru Orion Mall",
+    "store_type": "physical",
+    "quantity_available": 4,
+    "last_updated": "2025-12-07T09:45:00Z"
   },
   {
     "sku": "TSHIRT_WHT_RELAXED_01",
-    "store_id": "STORE_BLR_ORION",
-    "size": "M",
-    "quantity": 5
+    "store_id": "ONLINE",
+    "store_name": "Online DC",
+    "store_type": "online",
+    "quantity_available": 120,
+    "last_updated": "2025-12-07T11:00:00Z"
   },
   {
-    "sku": "JEANS_BLUE_MOMFIT_01",
+    "sku": "TSHIRT_WHT_RELAXED_01",
     "store_id": "STORE_BLR_ORION",
-    "size": "30",
-    "quantity": 3
+    "store_name": "Bengaluru Orion Mall",
+    "store_type": "physical",
+    "quantity_available": 10,
+    "last_updated": "2025-12-07T10:45:00Z"
   },
   {
-    "sku": "SNEAKER_WHT_CLASSIC_01",
-    "store_id": "STORE_BLR_ORION",
-    "size": "7",
-    "quantity": 10
+    "sku": "TSHIRT_BLK_RELAXED_01",
+    "store_id": "STORE_DELHI_CP",
+    "store_name": "Delhi Connaught Place",
+    "store_type": "physical",
+    "quantity_available": 8,
+    "last_updated": "2025-12-07T10:20:00Z"
   },
   {
-    "sku": "BAG_TOTE_CANVAS_01",
-    "store_id": "STORE_BLR_ORION",
-    "size": "standard",
-    "quantity": 20
+    "sku": "DRESS_WRAP_FLRL_01",
+    "store_id": "ONLINE",
+    "store_name": "Online DC",
+    "store_type": "online",
+    "quantity_available": 20,
+    "last_updated": "2025-12-07T09:15:00Z"
   },
   {
-    "sku": "HOODIE_BLK_OVERSIZED_01",
-    "store_id": "STORE_BLR_ORION",
-    "size": "M",
-    "quantity": 7
+    "sku": "KURTA_ETHNIC_YLW_01",
+    "store_id": "STORE_ONLINE_ONLY",
+    "store_name": "Online Only Warehouse",
+    "store_type": "online",
+    "quantity_available": 35,
+    "last_updated": "2025-12-07T09:30:00Z"
+  },
+  {
+    "sku": "HEELS_STRAP_NUDE_01",
+    "store_id": "STORE_DELHI_CP",
+    "store_name": "Delhi Connaught Place",
+    "store_type": "physical",
+    "quantity_available": 5,
+    "last_updated": "2025-12-07T10:10:00Z"
+  },
+  {
+    "sku": "BAG_TOTE_BLK_01",
+    "store_id": "STORE_MUMBAI_PHOENIX",
+    "store_name": "Mumbai Phoenix Mall",
+    "store_type": "physical",
+    "quantity_available": 7,
+    "last_updated": "2025-12-07T10:05:00Z"
   }
 ]

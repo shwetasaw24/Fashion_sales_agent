@@ -1,12 +1,41 @@
 [
   {
-    "promo_code": "WELCOME50",
-    "flat_discount": 50,
-    "description": "Flat ₹50 off for new customers"
+    "promo_code": "FESTIVEFIT20",
+    "description": "20% off on ethnic wear kurtas and dresses",
+    "discount_type": "percentage",
+    "discount_value": 20,
+    "applicable_categories": ["Apparel"],
+    "applicable_sub_categories": ["Kurtas", "Dresses"],
+    "min_order_value": 1499,
+    "start_date": "2025-10-25",
+    "end_date": "2025-11-15",
+    "applicable_channels": ["mobile_app", "web", "whatsapp"],
+    "max_uses_per_customer": 2
   },
   {
-    "promo_code": "WINTER10",
-    "flat_discount": 100,
-    "description": "Seasonal winter sale"
+    "promo_code": "SNEAKERHEAD15",
+    "description": "15% off on sneakers",
+    "discount_type": "percentage",
+    "discount_value": 15,
+    "applicable_categories": ["Footwear"],
+    "applicable_sub_categories": ["Sneakers"],
+    "min_order_value": 1999,
+    "start_date": "2025-09-01",
+    "end_date": "2025-12-31",
+    "applicable_channels": ["mobile_app", "kiosk"],
+    "max_uses_per_customer": 3
+  },
+  {
+    "promo_code": "BAGIT10",
+    "description": "Flat ₹200 off on bags above ₹1499",
+    "discount_type": "flat",
+    "discount_value": 200,
+    "applicable_categories": ["Accessories"],
+    "applicable_sub_categories": ["Bags"],
+    "min_order_value": 1499,
+    "start_date": "2025-08-01",
+    "end_date": "2025-12-31",
+    "applicable_channels": ["web", "mobile_app"],
+    "max_uses_per_customer": 5
   }
 ]
