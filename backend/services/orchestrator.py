@@ -2,9 +2,11 @@ from typing import Tuple
 from services.sessions import SessionContext
 from services.llm_client import route_tasks, compose_reply
 from services.recommendation import recommend_products
-from services.inventory import check_inventory
-from services.loyalty import quote_loyalty
+# from services.inventory_service import check_inventory
+from services.loyalty_service import quote_loyalty_for_cart as quote_loyalty
 from services.kestra_client import start_reserve_flow
+from services.inventory_service import check_inventory_for_recs as check_inventory
+
 
 async def process_message(req, ctx: SessionContext) -> Tuple[str, SessionContext]:
     router = await route_tasks(req.message, ctx)

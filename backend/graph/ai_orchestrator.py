@@ -1,35 +1,48 @@
-import os
+# backend/graph/ai_orchestrator.py
+
 import httpx
+import logging
 
-MODEL_NAME = "meta-llama/Meta-Llama-3-8B-Instruct"
-BASE_URL = "https://api.together.xyz/v1"
-
-API_KEY = os.getenv("TOGETHER_API_KEY")
-if not API_KEY:
-    raise RuntimeError("TOGETHER_API_KEY not found")
+logger = logging.getLogger(__name__)
 
 
 async def call_ai(messages):
+    """
+    Local LLM call using Ollama (tinyllama / phi3 / llama3).
+    No API key required.
+    """
 
-    headers = {
-        "Authorization": f"Bearer {API_KEY}",
-        "Content-Type": "application/json"
-    }
+    # Convert chat-based messages into a plain prompt
+    prompt = "\n".join(
+        f"{msg['role']}: {msg['content']}"
+        for msg in messages
+    )
 
-    payload = {
-        "model": MODEL_NAME,
-        "messages": messages,
-        "temperature": 0.3,
-        "max_tokens": 400,
-    }
+    try:
+        async with httpx.AsyncClient(timeout=60) as client:
+            response = await client.post(
+                "http://localhost:11434/api/generate",
+                json={
+                    "model": "tinyllama",  # ensure `ollama pull tinyllama`
+                    "prompt": prompt,
+                    "stream": False
+                },
+            )
 
-    async with httpx.AsyncClient(timeout=20) as client:
-        res = await client.post(
-            f"{BASE_URL}/chat/completions",
-            json=payload,
-            headers=headers,
+        response.raise_for_status()
+        data = response.json()
+
+        # Ollama returns: { "response": "...", ... }
+        return data["response"]
+    
+    except httpx.ConnectError as e:
+        logger.error(f"Cannot connect to Ollama at localhost:11434. Is Ollama running? Error: {str(e)}")
+        raise RuntimeError(
+            "Ollama service not available. Please start Ollama with: ollama serve"
         )
-
-    res.raise_for_status()
-
-    return res.json()["choices"][0]["message"]["content"]
+    except httpx.RequestError as e:
+        logger.error(f"Ollama request error: {str(e)}")
+        raise RuntimeError(f"Error calling Ollama: {str(e)}")
+    except Exception as e:
+        logger.error(f"Unexpected error calling AI: {str(e)}")
+        raise RuntimeError(f"Unexpected error in AI orchestrator: {str(e)}")
