@@ -19,10 +19,10 @@ async def handle_message(req: SalesMessageRequest) -> Dict[str, Any]:
         ctx = SessionContext(
             session_id=req.session_id,
             customer_id=req.customer_id,
-            current_channel=req.channel
+            channel=req.channel
         )
     else:
-        ctx.current_channel = req.channel
+        ctx.channel = req.channel
 
     reply, updated_ctx = await process_message(req, ctx)
     save_session(updated_ctx)

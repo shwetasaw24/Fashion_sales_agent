@@ -2,7 +2,7 @@
   {
     "session_id": "SESSION_001",
     "customer_id": "CUST_F_001",
-    "current_channel": "mobile_app",
+    "channel": "mobile_app",
     "active_cart_id": "CART_001",
     "context_state": {
       "intent": "browse_running_shoes",
@@ -26,7 +26,7 @@
   {
     "session_id": "SESSION_002",
     "customer_id": "CUST_F_003",
-    "current_channel": "kiosk",
+    "channel": "kiosk",
     "active_cart_id": "CART_002",
     "context_state": {
       "intent": "complete_outfit",

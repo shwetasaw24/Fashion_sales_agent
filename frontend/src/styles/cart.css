@@ -1,0 +1,146 @@
+/* Cart and Enhanced UI Styles */
+
+/* Cart Button */
+.cart-btn {
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.2s;
+  margin-left: 12px;
+}
+
+.cart-btn:hover {
+  background: #2980b9;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+/* Cart Panel */
+.cart-panel {
+  background: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+  padding: 16px;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.cart-panel h3 {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.cart-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cart-item {
+  background: white;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #333;
+  border-left: 3px solid #27ae60;
+}
+
+.cart-total {
+  background: #e8f5e9;
+  padding: 10px;
+  border-radius: 4px;
+  margin-top: 8px;
+  font-size: 14px;
+  color: #27ae60;
+  font-weight: bold;
+}
+
+.checkout-btn {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 8px;
+  width: 100%;
+  transition: background 0.2s;
+}
+
+.checkout-btn:hover {
+  background: #c0392b;
+}
+
+/* Add to Cart Button */
+.add-cart-btn {
+  background: #27ae60;
+  color: white;
+  border: none;
+  padding: 8px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  margin-top: auto;
+  transition: background 0.2s;
+  width: 100%;
+}
+
+.add-cart-btn:hover:not(:disabled) {
+  background: #229954;
+}
+
+.add-cart-btn:disabled {
+  background: #95a5a6;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Enhanced Product Card */
+.product-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-card .brand {
+  font-size: 11px;
+  color: var(--accent);
+  font-style: italic;
+  margin: 2px 0;
+}
+
+.product-card .sku {
+  font-size: 10px;
+  color: #999;
+  margin: 2px 0;
+}
+
+.product-card .price {
+  color: #e74c3c;
+  margin: 6px 0;
+}
+
+/* Disabled State for Input/Button */
+.chat-input button:disabled {
+  background: #95a5a6;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.chat-input input:disabled {
+  background: #f5f5f5;
+  color: #999;
+  cursor: not-allowed;
+}

@@ -13,7 +13,8 @@ BASE_URL = "http://127.0.0.1:8000"
 async def test_agent():
     """Test the complete agent flow"""
     
-    async with httpx.AsyncClient() as client:
+    timeout = httpx.Timeout(120.0, connect=10.0)
+    async with httpx.AsyncClient(timeout=timeout) as client:
         
         print("\n" + "="*60)
         print("🛍️  FASHION SALES AGENT - COMPREHENSIVE TEST")

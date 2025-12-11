@@ -3,6 +3,7 @@ import Sidebar from "./components/Sidebar";
 import ChatArea from "./components/ChatArea";
 import Login from "./components/Login";
 import "./styles/main.css";
+import "./styles/cart.css";
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(false);

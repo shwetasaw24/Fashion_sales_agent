@@ -3,33 +3,42 @@
 import os
 import httpx
 import json
+import logging
 
-TOGETHER_API_KEY = os.getenv("TOGETHER_API_KEY", "demo-key")
-TOGETHER_BASE_URL = os.getenv("TOGETHER_BASE_URL", "https://api.together.xyz/v1")
+logger = logging.getLogger(__name__)
 
-MODEL_NAME = "meta-llama/Meta-Llama-3.1-8B-Instruct"   # replace with your chosen model
+OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434")
+OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "tinyllama")
 
 
 async def call_llm(messages):
-    """Call Together.ai LLM with a list of messages."""
-    headers = {
-        "Authorization": f"Bearer {TOGETHER_API_KEY}",
-        "Content-Type": "application/json",
-    }
-
-    payload = {
-        "model": MODEL_NAME,
-        "messages": messages
-    }
-
-    async with httpx.AsyncClient() as client:
-        resp = await client.post(
-            f"{TOGETHER_BASE_URL}/chat/completions",
-            json=payload,
-            headers=headers
+    """Call local Ollama LLM with a list of messages."""
+    # Convert chat messages to a prompt
+    prompt = "\n".join(
+        f"{msg['role'].upper()}: {msg['content']}"
+        for msg in messages
+    )
+    
+    try:
+        async with httpx.AsyncClient(timeout=120) as client:
+            resp = await client.post(
+                f"{OLLAMA_URL}/api/generate",
+                json={
+                    "model": OLLAMA_MODEL,
+                    "prompt": prompt,
+                    "stream": False
+                }
+            )
+            resp.raise_for_status()
+            return resp.json()["response"]
+    except httpx.ConnectError as e:
+        logger.error(f"Cannot connect to Ollama at {OLLAMA_URL}. Is Ollama running? Error: {str(e)}")
+        raise RuntimeError(
+            f"Ollama service not available at {OLLAMA_URL}. Please start Ollama with: ollama serve"
         )
-        resp.raise_for_status()
-        return resp.json()["choices"][0]["message"]["content"]
+    except Exception as e:
+        logger.error(f"Error calling Ollama: {str(e)}")
+        raise RuntimeError(f"Error calling LLM: {str(e)}")
 
 
 # --------------------------------------------------------
@@ -37,36 +46,51 @@ async def call_llm(messages):
 # --------------------------------------------------------
 
 async def route_tasks(user_message, ctx):
-    system_prompt = """
-You are a task routing agent for a fashion retail conversational assistant.
+    system_prompt = """You are a task routing agent for a fashion retail conversational assistant.
 
-Your job:
-1. Understand the user's message.
-2. Output structured JSON with EXACT fields:
-{
-  "intent": "<string>",
-  "tasks": [
-    { "type": "RECOMMEND_PRODUCTS", "params": {...} },
-    { "type": "CHECK_INVENTORY", "params": {...} },
-    { "type": "QUOTE_LOYALTY_PROMOS", "params": {...} },
-    { "type": "RESERVE_IN_STORE", "params": {...} }
-  ]
-}
+Analyze the user message and return a simple JSON response.
 
-NEVER output anything except valid JSON.
-"""
+If user wants to see products, recommend them:
+{"intent": "BROWSE_PRODUCTS", "tasks": [{"type": "RECOMMEND_PRODUCTS", "params": {"query": "dresses or tops or whatever they asked for"}}]}
 
-    user_prompt = f"User message: {user_message}\nSession: {ctx.__dict__}"
+If user asks about stock/availability:
+{"intent": "CHECK_STOCK", "tasks": [{"type": "CHECK_INVENTORY", "params": {}}]}
 
-    raw = await call_llm([
-        {"role": "system", "content": system_prompt},
-        {"role": "user", "content": user_prompt}
-    ])
+If user wants to add to cart or checkout:
+{"intent": "SHOPPING", "tasks": [{"type": "RECOMMEND_PRODUCTS", "params": {"query": "recommended products"}}]}
 
-    # Parse JSON output safely
+Default response if unsure:
+{"intent": "HELP", "tasks": []}
+
+ALWAYS respond with valid JSON only. No other text."""
+
+    user_prompt = f"User message: {user_message}"
+
     try:
+        raw = await call_llm([
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt}
+        ])
+
+        # Try to extract JSON from response
+        raw = raw.strip()
+        
+        # If response starts with ```json, extract it
+        if "```json" in raw:
+            raw = raw.split("```json")[1].split("```")[0].strip()
+        elif "```" in raw:
+            raw = raw.split("```")[1].split("```")[0].strip()
+        
         parsed = json.loads(raw)
-    except:
+    except json.JSONDecodeError as e:
+        logger.warning(f"Failed to parse LLM JSON response: {raw}. Error: {e}")
+        # Fallback for simple recommendation
+        parsed = {
+            "intent": "BROWSE_PRODUCTS",
+            "tasks": [{"type": "RECOMMEND_PRODUCTS", "params": {"query": user_message}}]
+        }
+    except Exception as e:
+        logger.error(f"Error in route_tasks: {e}")
         parsed = {"intent": "UNKNOWN", "tasks": []}
 
     return parsed
@@ -78,27 +102,31 @@ NEVER output anything except valid JSON.
 # --------------------------------------------------------
 
 async def compose_reply(user_message, ctx, task_results):
-    system_prompt = """
-You are a helpful fashion shopping assistant.
-You receive:
-- the user's last message
-- results from tools (recommendations, inventory, loyalty, reservation status)
+    system_prompt = """You are a helpful fashion shopping assistant.
+You have received tool results about products, inventory, and loyalty.
 
-Create a natural-language response. Be short, friendly, and actionable.
-"""
+Create a friendly, short response (2-3 sentences max) about what you found.
+Be helpful and actionable."""
 
-    user_prompt = f"""
-User said: {user_message}
+    results_text = json.dumps(task_results, indent=2, default=str)
+    
+    user_prompt = f"""User said: {user_message}
 
 Tool results:
-{json.dumps(task_results, indent=2)}
+{results_text}
 
-Now generate the message to send back to the user.
-"""
+Respond naturally and helpfully."""
 
-    reply = await call_llm([
-        {"role": "system", "content": system_prompt},
-        {"role": "user", "content": user_prompt}
-    ])
-
-    return reply
+    try:
+        reply = await call_llm([
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt}
+        ])
+        return reply.strip()
+    except Exception as e:
+        logger.error(f"Error composing reply: {e}")
+        # Fallback response
+        if task_results.get("RECOMMEND_PRODUCTS"):
+            count = len(task_results.get("RECOMMEND_PRODUCTS", []))
+            return f"Found {count} products for you! Check them out in the chat."
+        return "Let me help you find what you're looking for!"

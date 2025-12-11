@@ -1,0 +1,40 @@
+INFO:     Started server process [28232]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+Failed to parse LLM JSON response: [{'text': 'You are a task routing agent for a fashion retail conversational assistant.'}]
+[
+    {
+        "intent": "BROWSE_PRODUCTS",
+        "tasks": [
+            {
+                "type": "RECOMMEND_PRODUCTS",
+                "params": {"query": "dresses or topstops or whatever they asked for"}
+            }
+        ]
+    },
+    {
+        "intent": "CHECK_STOCK",
+        "tasks": [
+            {
+                "type": "CHECK_INVENTORY",
+                "params": {}
+            }
+        ]
+    },
+    {
+        "intent": "SHOPPING",
+        "tasks": [
+            {
+                "type": "RECOMMEND_PRODUCTS",
+                "params": {"query": "recommended products"}
+            }
+        ]
+    },
+    {
+        "intent": "HELP",
+        "tasks": []
+    }
+]. Error: Expecting property name enclosed in double quotes: line 1 column 3 (char 2)
+Error calling Ollama: 
+Error composing reply: Error calling LLM: 

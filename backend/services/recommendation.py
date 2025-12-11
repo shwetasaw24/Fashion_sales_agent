@@ -92,8 +92,10 @@ def recommend_products(customer_id: str, params: Dict, user_message: str = "") -
     category = params.get("category")
     style = params.get("style", preferences.get("primary_style"))
     max_price = params.get("max_price", inferred_budget)
-    occasion = params.get("occasion", preferences.get("preferred_occasion", [None])[0])
-    color_pref = params.get("color", preferences.get("color_preferences", [None])[0])
+    pref_occasions = preferences.get("preferred_occasion") or []
+    occasion = params.get("occasion", pref_occasions[0] if pref_occasions else None)
+    pref_colors = preferences.get("color_preferences") or []
+    color_pref = params.get("color", pref_colors[0] if pref_colors else None)
     
     # Start with all products
     results = PRODUCTS

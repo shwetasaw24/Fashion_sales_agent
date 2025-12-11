@@ -18,7 +18,9 @@ async def process_message(req, ctx: SessionContext) -> Tuple[str, SessionContext
         params = task.get("params", {})
 
         if ttype == "RECOMMEND_PRODUCTS":
-            recs = recommend_products(params, ctx)
+            # recommend_products expects (customer_id, params, user_message)
+            customer_id = getattr(ctx, "customer_id", None)
+            recs = recommend_products(customer_id, params, req.message)
             task_results["RECOMMEND_PRODUCTS"] = recs
 
         elif ttype == "CHECK_INVENTORY":
