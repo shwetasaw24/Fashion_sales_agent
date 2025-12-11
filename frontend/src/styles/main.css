@@ -1,0 +1,349 @@
+/* ------------------------------
+   GLOBAL THEME
+------------------------------ */
+:root {
+  --cream: #f6f2ea;
+  --black: #111111;
+  --soft-black: #1b1b1b;
+  --grey: #7a7a7a;
+  --light-grey: #dcd7ce;
+  --accent: #c5b08f; /* luxury gold-beige */
+  --radius: 12px;
+  --transition: 0.2s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+}
+
+body {
+  background: var(--cream);
+  color: var(--black);
+}
+
+/* ------------------------------
+   LOGIN SCREEN
+------------------------------ */
+.login-screen {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: var(--cream);
+  padding: 20px;
+}
+
+.brand-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--black);
+  letter-spacing: 3px;
+}
+
+.brand-sub {
+  margin-top: 5px;
+  margin-bottom: 25px;
+  font-size: 16px;
+  color: var(--grey);
+}
+
+.login-screen input {
+  width: 320px;
+  padding: 14px;
+  border: 2px solid var(--light-grey);
+  background: white;
+  border-radius: var(--radius);
+  font-size: 15px;
+  margin-bottom: 12px;
+  transition: var(--transition);
+}
+
+.login-screen input:focus {
+  border-color: var(--accent);
+}
+
+.login-btn {
+  width: 320px;
+  padding: 14px;
+  background: var(--black);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.login-btn:hover {
+  background: var(--soft-black);
+}
+
+.error {
+  color: red;
+  margin-bottom: 10px;
+}
+
+/* ------------------------------
+   LAYOUT (SIDEBAR + CHAT)
+------------------------------ */
+.layout {
+  display: flex;
+  height: 100vh;
+}
+
+/* ------------------------------
+   SIDEBAR
+------------------------------ */
+.sidebar {
+  width: 270px;
+  background: var(--black);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.newchat-btn {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--cream);
+  background: transparent;
+  color: var(--cream);
+  border-radius: var(--radius);
+  font-size: 14px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.newchat-btn:hover {
+  background: var(--cream);
+  color: var(--black);
+}
+
+.sidebar-title {
+  margin-top: 25px;
+  font-size: 14px;
+  color: var(--light-grey);
+  letter-spacing: 1px;
+}
+
+.chatlist {
+  margin-top: 10px;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.chat-item {
+  padding: 12px;
+  background: transparent;
+  border-radius: var(--radius);
+  color: white;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.chat-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.chat-item.active {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.chat-menu {
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.user-footer {
+  margin-top: 20px;
+}
+
+.user-email {
+  font-size: 13px;
+  color: var(--light-grey);
+}
+
+.logout-btn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: var(--radius);
+  background: var(--cream);
+  border: none;
+  color: var(--black);
+  font-size: 14px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.logout-btn:hover {
+  background: white;
+}
+
+/* ------------------------------
+   CHAT AREA
+------------------------------ */
+.chat-area {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--cream);
+}
+
+.chat-header {
+  padding: 18px 22px;
+  background: white;
+  border-bottom: 1px solid var(--light-grey);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.chat-history {
+  flex-grow: 1;
+  padding: 25px;
+  overflow-y: auto;
+}
+
+.placeholder {
+  color: var(--grey);
+  font-size: 16px;
+  text-align: center;
+  margin-top: 60px;
+}
+
+/* ------------------------------
+   MESSAGE BUBBLES
+------------------------------ */
+.msg {
+  max-width: 650px;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  border-radius: var(--radius);
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+.msg.user {
+  align-self: flex-end;
+  background: var(--black);
+  color: white;
+  border-top-right-radius: 0;
+}
+
+.msg.bot {
+  align-self: flex-start;
+  background: white;
+  color: var(--black);
+  border-top-left-radius: 0;
+  border: 1px solid var(--light-grey);
+}
+
+/* ------------------------------
+   PRODUCT CARDS (Recommendations)
+------------------------------ */
+.product-grid {
+  margin-top: 12px;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.product-card {
+  width: 150px;
+  background: white;
+  border-radius: var(--radius);
+  border: 1px solid var(--light-grey);
+  padding: 10px;
+  text-align: center;
+  transition: var(--transition);
+}
+
+.product-card:hover {
+  transform: translateY(-3px);
+}
+
+.product-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  margin-bottom: 8px;
+}
+
+.product-card h4 {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.product-card p {
+  font-size: 12px;
+  color: var(--grey);
+}
+
+.product-card span {
+  font-size: 14px;
+  font-weight: bold;
+  display: block;
+  margin-top: 4px;
+}
+
+/* ------------------------------
+   IMAGES INSIDE CHAT
+------------------------------ */
+.img-group {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+.chat-img {
+  width: 160px;
+  border-radius: var(--radius);
+  border: 1px solid var(--light-grey);
+  object-fit: cover;
+}
+
+/* ------------------------------
+   INPUT AREA
+------------------------------ */
+.chat-input {
+  display: flex;
+  padding: 18px;
+  background: white;
+  border-top: 1px solid var(--light-grey);
+}
+
+.chat-input input {
+  flex-grow: 1;
+  padding: 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--light-grey);
+  background: white;
+  font-size: 15px;
+}
+
+.chat-input button {
+  margin-left: 12px;
+  padding: 14px 22px;
+  border: none;
+  background: var(--black);
+  color: white;
+  border-radius: var(--radius);
+  font-size: 15px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.chat-input button:hover {
+  background: var(--soft-black);
+}
