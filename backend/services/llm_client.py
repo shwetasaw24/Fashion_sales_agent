@@ -4,6 +4,7 @@ import os
 import httpx
 import json
 import logging
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -41,6 +42,79 @@ async def call_llm(messages):
         raise RuntimeError(f"Error calling LLM: {str(e)}")
 
 
+def clean_response(text):
+    """
+    Aggressively clean messy tinyllama output.
+    Remove duplicates, fix capitalization, remove explanatory text.
+    """
+    if not text:
+        return text
+    
+    # Remove extra whitespace
+    text = " ".join(text.split())
+    
+    # Remove common tinyllama artifacts: repeated phrases, user echoes
+    text = re.sub(r'\b(\w+)\s+(?:is|as)\s+\1\b', r'\1', text, flags=re.IGNORECASE)
+    
+    # Remove "User:|Assistant:|System:" prefixes
+    text = re.sub(r'(User|Assistant|System):\s*', '', text, flags=re.IGNORECASE)
+    
+    # Remove markdown artifacts
+    text = text.replace("**", "").replace("*", "").replace("```", "")
+    text = text.replace("__", "").replace("_", "")
+    
+    # Remove common filler phrases
+    fillers = [
+        r'\bhere(?:\'s|\'re)?\b',
+        r'\bwould you like\b',
+        r'\bcan i help\b',
+        r'\blet me\b',
+        r'\bas a\b',
+        r'\bis a\b',
+        r'\bthis is\b',
+        r'\byou asked\b',
+        r'\byou said\b',
+        r'\buser (said|asked)',
+    ]
+    for filler in fillers:
+        text = re.sub(filler, '', text, flags=re.IGNORECASE)
+    
+    # Fix common capitalization errors: "SnEaker" → "Sneaker"
+    def fix_caps(match):
+        word = match.group(0)
+        # Count consecutive caps
+        if sum(1 for c in word if c.isupper()) > 2:
+            return word.capitalize()
+        return word
+    
+    text = re.sub(r'\b[A-Z][a-z]*(?:[A-Z][a-z]*)+\b', fix_caps, text)
+    
+    return text.strip()
+
+
+def extract_json_from_text(text):
+    """
+    Aggressively extract and clean JSON from LLM response.
+    """
+    text = text.strip()
+    
+    # Remove markdown code fences
+    if "```json" in text:
+        text = text.split("```json")[1].split("```")[0].strip()
+    elif "```" in text:
+        text = text.split("```")[1].split("```")[0].strip()
+    
+    # Try to find JSON object { ... } in the text
+    start_idx = text.find('{')
+    end_idx = text.rfind('}')
+    
+    if start_idx != -1 and end_idx != -1 and end_idx > start_idx:
+        json_str = text[start_idx:end_idx+1]
+        return json_str.strip()
+    
+    return text.strip()
+
+
 # --------------------------------------------------------
 # ROUTER LLM → returns { intent, tasks: [...] }
 # --------------------------------------------------------
@@ -48,23 +122,10 @@ async def call_llm(messages):
 async def route_tasks(user_message, ctx):
     system_prompt = """You are a task routing agent for a fashion retail conversational assistant.
 
-Analyze the user message and return a simple JSON response.
+Return ONLY a JSON response in this exact format, with NO other text:
+{"intent": "BROWSE_PRODUCTS", "tasks": [{"type": "RECOMMEND_PRODUCTS", "params": {"query": "user query"}}]}"""
 
-If user wants to see products, recommend them:
-{"intent": "BROWSE_PRODUCTS", "tasks": [{"type": "RECOMMEND_PRODUCTS", "params": {"query": "dresses or tops or whatever they asked for"}}]}
-
-If user asks about stock/availability:
-{"intent": "CHECK_STOCK", "tasks": [{"type": "CHECK_INVENTORY", "params": {}}]}
-
-If user wants to add to cart or checkout:
-{"intent": "SHOPPING", "tasks": [{"type": "RECOMMEND_PRODUCTS", "params": {"query": "recommended products"}}]}
-
-Default response if unsure:
-{"intent": "HELP", "tasks": []}
-
-ALWAYS respond with valid JSON only. No other text."""
-
-    user_prompt = f"User message: {user_message}"
+    user_prompt = f"User: {user_message}"
 
     try:
         raw = await call_llm([
@@ -72,16 +133,9 @@ ALWAYS respond with valid JSON only. No other text."""
             {"role": "user", "content": user_prompt}
         ])
 
-        # Try to extract JSON from response
-        raw = raw.strip()
-        
-        # If response starts with ```json, extract it
-        if "```json" in raw:
-            raw = raw.split("```json")[1].split("```")[0].strip()
-        elif "```" in raw:
-            raw = raw.split("```")[1].split("```")[0].strip()
-        
-        parsed = json.loads(raw)
+        # Aggressively extract JSON
+        json_str = extract_json_from_text(raw)
+        parsed = json.loads(json_str)
     except json.JSONDecodeError as e:
         logger.warning(f"Failed to parse LLM JSON response: {raw}. Error: {e}")
         # Fallback for simple recommendation
@@ -103,30 +157,47 @@ ALWAYS respond with valid JSON only. No other text."""
 
 async def compose_reply(user_message, ctx, task_results):
     system_prompt = """You are a helpful fashion shopping assistant.
-You have received tool results about products, inventory, and loyalty.
+Create a SHORT response (1-2 sentences) about products found. Be concise and friendly."""
 
+<<<<<<< HEAD
 Respond in Markdown. Use short, helpful sentences (1-3) and use bullet lists when listing multiple items. Use bold for key items (product name or price) and include a short actionable next step (e.g., 'Add to cart' or 'View images').
 Keep replies concise and friendly."""
 
     results_text = json.dumps(task_results, indent=2, default=str)
+=======
+    # Prepare results summary
+    product_count = len(task_results.get("RECOMMEND_PRODUCTS", []))
+    product_names = []
+    if task_results.get("RECOMMEND_PRODUCTS"):
+        for prod in task_results["RECOMMEND_PRODUCTS"][:3]:
+            product_names.append(prod.get("name", "Product"))
+>>>>>>> 6db1631465f43accdbbe288418bd6fda45530af1
     
-    user_prompt = f"""User said: {user_message}
+    results_summary = f"Found {product_count} products."
+    if product_names:
+        results_summary += f" Top: {', '.join(product_names)}"
+    
+    user_prompt = f"""User asked: {user_message}
+Results: {results_summary}
 
-Tool results:
-{results_text}
-
-Respond naturally and helpfully."""
+Response (1-2 sentences max):"""
 
     try:
         reply = await call_llm([
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt}
         ])
+        
+        # Aggressively clean the reply
+        reply = clean_response(reply)
+        
+        # Remove markdown artifacts
+        reply = reply.replace("**", "").replace("*", "").replace("```", "")
+        
         return reply.strip()
     except Exception as e:
         logger.error(f"Error composing reply: {e}")
         # Fallback response
-        if task_results.get("RECOMMEND_PRODUCTS"):
-            count = len(task_results.get("RECOMMEND_PRODUCTS", []))
-            return f"Found {count} products for you! Check them out in the chat."
+        if product_count > 0:
+            return f"Found {product_count} great products for you!"
         return "Let me help you find what you're looking for!"

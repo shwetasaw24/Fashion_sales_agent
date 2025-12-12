@@ -19,7 +19,7 @@
     "price": 599,
     "currency": "INR",
     "images": [
-      "https://cdn.example.com/products/TSHIRT_WHT_RELAXED_01/front.jpg"
+      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab"
     ],
     "tags": ["bestseller", "casual"]
   },
@@ -43,7 +43,7 @@
     "price": 649,
     "currency": "INR",
     "images": [
-      "https://cdn.example.com/products/TSHIRT_BLK_RELAXED_01/front.jpg"
+      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?fit=facearea&facepad=5&w=800&h=1000&q=80&sat=-100"
     ],
     "tags": ["casual"]
   },
@@ -65,7 +65,7 @@
     "price": 899,
     "currency": "INR",
     "images": [
-      "https://cdn.example.com/products/TSHIRT_OVERSIZE_GRPH_01/main.jpg"
+      "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf"
     ],
     "tags": ["new_arrival"]
   },
@@ -87,7 +87,7 @@
     "price": 1499,
     "currency": "INR",
     "images": [
-      "https://cdn.example.com/products/SHIRT_SOLID_BLUE_01/main.jpg"
+      "https://images.unsplash.com/photo-1593032457868-5b67d1bd9f4c"
     ],
     "tags": ["office_essential"]
   },
@@ -109,7 +109,7 @@
     "price": 1799,
     "currency": "INR",
     "images": [
-      "https://cdn.example.com/products/JEANS_MOM_BLUE_01/main.jpg"
+      "https://images.unsplash.com/photo-1586790170083-2c9a0f0690f4"
     ],
     "tags": ["new_arrival"]
   },
@@ -131,7 +131,7 @@
     "price": 1999,
     "currency": "INR",
     "images": [
-      "https://cdn.example.com/products/JEANS_SKINNY_DKBLU_01/main.jpg"
+      "https://images.unsplash.com/photo-1541099649105-f69ad21f3246"
     ],
     "tags": ["bestseller"]
   },
@@ -153,7 +153,7 @@
     "price": 2299,
     "currency": "INR",
     "images": [
-      "https://cdn.example.com/products/DRESS_WRAP_FLRL_01/main.jpg"
+      "https://images.unsplash.com/photo-1556906781-9a412961c28c"
     ],
     "tags": ["partywear", "new_arrival"]
   },
@@ -175,7 +175,7 @@
     "price": 1299,
     "currency": "INR",
     "images": [
-      "https://cdn.example.com/products/KURTA_ETHNIC_YLW_01/main.jpg"
+      "https://images.unsplash.com/photo-1615874959474-d609969a70e1"
     ],
     "tags": ["festive", "on_sale"]
   },
@@ -199,7 +199,7 @@
     "price": 2499,
     "currency": "INR",
     "images": [
-      "https://cdn.example.com/products/SNEAKERS_CHUNKY_WHT_01/main.jpg"
+      "https://images.unsplash.com/photo-1542293787938-c9e299b8805f"
     ],
     "tags": ["bestseller", "on_sale"]
   },
@@ -223,7 +223,7 @@
     "price": 2499,
     "currency": "INR",
     "images": [
-      "https://cdn.example.com/products/SNEAKERS_CHUNKY_BGE_01/main.jpg"
+      "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f"
     ],
     "tags": ["athleisure"]
   },
@@ -245,7 +245,7 @@
     "price": 1999,
     "currency": "INR",
     "images": [
-      "https://cdn.example.com/products/HEELS_STRAP_NUDE_01/main.jpg"
+      "https://images.unsplash.com/photo-1593032465171-bdc2d48df49b"
     ],
     "tags": ["partywear"]
   },
@@ -267,7 +267,7 @@
     "price": 1599,
     "currency": "INR",
     "images": [
-      "https://cdn.example.com/products/BAG_TOTE_BLK_01/main.jpg"
+      "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?fit=crop&w=900&q=80"
     ],
     "tags": ["office_essential", "bestseller"]
   }
