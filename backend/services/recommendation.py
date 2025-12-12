@@ -132,6 +132,14 @@ def recommend_products(customer_id: str, params: Dict, user_message: str = "") -
     # Return top recommendations with rich data
     recommendations = []
     for product in results[:5]:
+        # pick the first image for quick display
+        image = None
+        imgs = product.get("images") or product.get("image") or []
+        if isinstance(imgs, list) and len(imgs) > 0:
+            image = imgs[0]
+        elif isinstance(imgs, str):
+            image = imgs
+
         recommendations.append({
             "sku": product.get("sku"),
             "name": product.get("name"),
@@ -147,6 +155,7 @@ def recommend_products(customer_id: str, params: Dict, user_message: str = "") -
             "occasion": product.get("occasion", []),
             "rating": product.get("rating", 4.5),
             "in_stock": True,  # Simplified
+            "image": image,
         })
     
     return recommendations

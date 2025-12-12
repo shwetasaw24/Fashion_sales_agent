@@ -105,8 +105,8 @@ async def compose_reply(user_message, ctx, task_results):
     system_prompt = """You are a helpful fashion shopping assistant.
 You have received tool results about products, inventory, and loyalty.
 
-Create a friendly, short response (2-3 sentences max) about what you found.
-Be helpful and actionable."""
+Respond in Markdown. Use short, helpful sentences (1-3) and use bullet lists when listing multiple items. Use bold for key items (product name or price) and include a short actionable next step (e.g., 'Add to cart' or 'View images').
+Keep replies concise and friendly."""
 
     results_text = json.dumps(task_results, indent=2, default=str)
     

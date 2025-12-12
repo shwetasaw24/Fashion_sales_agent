@@ -1,4 +1,7 @@
 import { useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeSanitize from "rehype-sanitize";
 
 const API_BASE_URL = "http://localhost:8000";
 
@@ -167,7 +170,13 @@ export default function ChatArea({ sessions, currentChat, updateChat }) {
         ) : (
           messages.map((msg, idx) => (
             <div key={idx} className={`msg ${msg.sender}`}>
-              <p>{msg.text}</p>
+              {msg.text ? (
+                <div className="bot-text">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeSanitize]}>
+                    {msg.text}
+                  </ReactMarkdown>
+                </div>
+              ) : null}
 
               {/* Recommendations */}
               {msg.recommendations?.length > 0 && (

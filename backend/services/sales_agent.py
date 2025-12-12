@@ -24,7 +24,10 @@ async def handle_message(req: SalesMessageRequest) -> Dict[str, Any]:
     else:
         ctx.channel = req.channel
 
-    reply, updated_ctx = await process_message(req, ctx)
+    reply, updated_ctx, task_results = await process_message(req, ctx)
     save_session(updated_ctx)
 
-    return {"reply": reply}
+    # Extract recommendations if present
+    recommendations = task_results.get("RECOMMEND_PRODUCTS") if task_results else []
+
+    return {"reply": reply, "recommendations": recommendations}
