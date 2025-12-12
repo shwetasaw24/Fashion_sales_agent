@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, Dict, Any
 from services.sessions import SessionContext
 from services.llm_client import route_tasks, compose_reply
 from services.recommendation import recommend_products
@@ -8,7 +8,7 @@ from services.kestra_client import start_reserve_flow
 from services.inventory_service import check_inventory_for_recs as check_inventory
 
 
-async def process_message(req, ctx: SessionContext) -> Tuple[str, SessionContext]:
+async def process_message(req, ctx: SessionContext) -> Tuple[str, SessionContext, Dict[str, Any]]:
     router = await route_tasks(req.message, ctx)
 
     task_results = {}
@@ -41,4 +41,4 @@ async def process_message(req, ctx: SessionContext) -> Tuple[str, SessionContext
     ctx.intent = router.get("intent")
     ctx.last_message = req.message
 
-    return reply, ctx
+    return reply, ctx, task_results

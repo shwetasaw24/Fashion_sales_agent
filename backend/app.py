@@ -11,6 +11,7 @@ from routers.cart import cart_router
 from routers.checkout import checkout_router
 from routers.payments import payments_router
 from services.sales_agent import sales_agent_router
+from routers.inventory import inventory_router
 
 # Create FastAPI app
 app = FastAPI(
@@ -60,6 +61,12 @@ app.include_router(
     cart_router,
     prefix="/api/cart",
     tags=["Shopping Cart"]
+)
+
+app.include_router(
+    inventory_router,
+    prefix="/api/inventory",
+    tags=["Inventory"]
 )
 
 app.include_router(

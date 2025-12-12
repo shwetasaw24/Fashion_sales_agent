@@ -14,12 +14,12 @@ from services.inventory_service import (
 inventory_router = APIRouter()
 
 
-@inventory_router.get("/inventory", response_model=List[InventoryItem])
+@inventory_router.get("/", response_model=List[InventoryItem])
 async def api_list_inventory():
     return list_inventory()
 
 
-@inventory_router.get("/inventory/sku/{sku}", response_model=List[InventoryItem])
+@inventory_router.get("/sku/{sku}", response_model=List[InventoryItem])
 async def api_inventory_by_sku(sku: str):
     items = get_inventory_by_sku(sku)
     if not items:
@@ -27,7 +27,7 @@ async def api_inventory_by_sku(sku: str):
     return items
 
 
-@inventory_router.get("/inventory/store/{store_id}", response_model=List[InventoryItem])
+@inventory_router.get("/store/{store_id}", response_model=List[InventoryItem])
 async def api_inventory_by_store(store_id: str):
     items = get_inventory_by_store(store_id)
     if not items:

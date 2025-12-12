@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from typing import Dict, Any
 from services.sessions import get_session, save_session, SessionContext
 from services.orchestrator import process_message
+from services.inventory_service import get_inventory_by_sku
 
 sales_agent_router = APIRouter()
 
@@ -24,7 +25,31 @@ async def handle_message(req: SalesMessageRequest) -> Dict[str, Any]:
     else:
         ctx.channel = req.channel
 
-    reply, updated_ctx = await process_message(req, ctx)
+    reply, updated_ctx, task_results = await process_message(req, ctx)
     save_session(updated_ctx)
 
-    return {"reply": reply}
+    # Include recommendations (if any) and intent in the response for frontend
+    response = {"reply": reply}
+    if task_results.get("RECOMMEND_PRODUCTS"):
+        recs = task_results.get("RECOMMEND_PRODUCTS")
+        # Enrich recommendations with inventory availability
+        enriched = []
+        for r in recs:
+            sku = r.get("sku")
+            inv_items = get_inventory_by_sku(sku)
+            total_qty = 0
+            for inv in inv_items:
+                qty = getattr(inv, "quantity_available", None) or getattr(inv, "quantity", 0)
+                try:
+                    total_qty += int(qty)
+                except Exception:
+                    pass
+            r_copy = dict(r)
+            r_copy["quantity_available"] = total_qty
+            enriched.append(r_copy)
+
+        response["recommendations"] = enriched
+    if getattr(updated_ctx, "intent", None):
+        response["intent"] = updated_ctx.intent
+
+    return response

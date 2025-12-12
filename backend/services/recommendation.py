@@ -96,6 +96,9 @@ def recommend_products(customer_id: str, params: Dict, user_message: str = "") -
     occasion = params.get("occasion", pref_occasions[0] if pref_occasions else None)
     pref_colors = preferences.get("color_preferences") or []
     color_pref = params.get("color", pref_colors[0] if pref_colors else None)
+    # Respect free-text query from LLM/user
+    query = params.get("query") or user_message or ""
+    query = query.strip().lower() if query else ""
     
     # Start with all products
     results = PRODUCTS
@@ -121,6 +124,69 @@ def recommend_products(customer_id: str, params: Dict, user_message: str = "") -
         color_matched = [p for p in results if p.get("base_color", "").lower() == color_pref.lower()]
         if color_matched:
             results = color_matched
+
+    # If a text query is provided, filter by relevance to the query
+    if query:
+        # Helper to singularize simple plurals (kurtas -> kurta)
+        def singular(token: str) -> str:
+            if token.endswith('ies'):
+                return token[:-3] + 'y'
+            if token.endswith('s') and len(token) > 3:
+                return token[:-1]
+            return token
+
+        query_tokens = [t.strip() for t in query.split() if t.strip()]
+        query_tokens = list({t.lower() for t in query_tokens})
+
+        def relevance_score(p):
+            score = 0
+            name = str(p.get('name', '')).lower()
+            category_field = str(p.get('category', '')).lower()
+            sub_category_field = str(p.get('sub_category', '')).lower()
+            brand = str(p.get('brand', '')).lower()
+            style_tags = [s.lower() for s in p.get('style_tags', [])]
+            tags = [t.lower() for t in p.get('tags', [])]
+            occasion_field = ' '.join([o.lower() for o in p.get('occasion', [])])
+
+            combined = ' '.join([name, category_field, sub_category_field, brand, occasion_field] + style_tags + tags)
+
+            for token in query_tokens:
+                tok = token
+                tok_sing = singular(tok)
+
+                # Exact high-weight matches
+                if tok == sub_category_field or tok_sing == sub_category_field:
+                    score += 6
+                if tok == category_field or tok_sing == category_field:
+                    score += 5
+                if tok == brand or tok_sing == brand:
+                    score += 4
+
+                # Tags / style / occasion
+                if tok in style_tags or tok_sing in style_tags:
+                    score += 3
+                if tok in tags or tok_sing in tags:
+                    score += 3
+                if tok in occasion_field or tok_sing in occasion_field:
+                    score += 2
+
+                # Name or substring match
+                if tok in name or tok_sing in name:
+                    score += 2
+
+                # fallback: token anywhere in combined
+                if tok in combined:
+                    score += 1
+
+            return score
+
+        scored = [(relevance_score(p), p) for p in results]
+        # Keep only products with at least one match, unless none match then keep all
+        matched = [p for s, p in scored if s > 0]
+        if matched:
+            # sort by relevance score desc, keep original budget sorting as secondary
+            scored_matched = sorted([(relevance_score(p), p) for p in matched], key=lambda x: (-x[0], abs(x[1].get('price', 0) - (max_price * 0.8))))
+            results = [p for s, p in scored_matched]
     
     # Sort by relevance (price proximity to budget)
     if max_price:
@@ -144,6 +210,8 @@ def recommend_products(customer_id: str, params: Dict, user_message: str = "") -
             "colors_available": [product.get("base_color")] + [
                 c.get("color") for c in product.get("color_variants", [])
             ],
+            "images": product.get("images", []),
+            "image": (product.get("images", [None])[0] if product.get("images") else None),
             "occasion": product.get("occasion", []),
             "rating": product.get("rating", 4.5),
             "in_stock": True,  # Simplified
