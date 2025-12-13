@@ -2,6 +2,7 @@ import json
 from .ai_orchestrator import call_ai
 import sys
 from pathlib import Path
+import re
 
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -9,6 +10,119 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from services.recommendation import recommend_products
 from services.cart_service import CartService
 from services.order_service import OrderService
+
+
+def infer_params_from_text(text: str):
+    """Lightweight heuristics to extract category, sub_category, color, size, and max_price
+    from a user's free-text message. This reduces dependence on the LLM extracting
+    perfectly-formed params and avoids unrelated/hallucinated recommendations.
+    """
+    text_l = text.lower()
+    params = {}
+
+    # PRIORITY 1: Category & Sub-category (Most important)
+    # Extended category mapping with more keywords
+        # Maps to (category, sub_category) - using actual product data structure
+    cat_map = {
+            # Dresses
+            "dress": ("Apparel", "Dresses"),
+            "dresses": ("Apparel", "Dresses"),
+            "gown": ("Apparel", "Dresses"),
+            "maxi": ("Apparel", "Dresses"),
+            "floral": ("Apparel", "Dresses"),
+            
+            # T-Shirts (product data has sub_category "T-Shirts")
+            "t-shirt": ("Apparel", "T-Shirts"),
+            "t shirt": ("Apparel", "T-Shirts"),
+            "tee": ("Apparel", "T-Shirts"),
+            "tshirt": ("Apparel", "T-Shirts"),
+            
+            # Jeans
+            "jeans": ("Apparel", "Jeans"),
+            "denim": ("Apparel", "Jeans"),
+            
+            # Shirts
+            "shirt": ("Apparel", "Shirts"),
+            "blouse": ("Apparel", "Shirts"),
+            
+            # Kurtas
+            "kurta": ("Apparel", "Kurtas"),
+            "kurtas": ("Apparel", "Kurtas"),
+            
+            # Shoes
+            "sneaker": ("Footwear", "Sneakers"),
+            "sneakers": ("Footwear", "Sneakers"),
+            "shoe": ("Footwear", "Sneakers"),
+            "shoes": ("Footwear", "Sneakers"),
+            "heel": ("Footwear", "Heels"),
+            "heels": ("Footwear", "Heels"),
+            "sandal": ("Footwear", "Sandals"),
+            "sandals": ("Footwear", "Sandals"),
+            
+            # Outerwear
+            "jacket": ("Apparel", "Jacket"),
+            "coat": ("Apparel", "Coat"),
+            
+            # Bottoms
+            "skirt": ("Apparel", "Skirt"),
+            "trouser": ("Apparel", "Jeans"),
+            "pants": ("Apparel", "Jeans"),
+            
+            # Accessories
+            "bag": ("Accessories", "Bags"),
+            "bags": ("Accessories", "Bags"),
+            "tote": ("Accessories", "Bags"),
+    }
+
+    # Find the most specific category match
+    best_match = None
+    best_length = 0
+    
+    for token, (cat, sub) in cat_map.items():
+        if token in text_l and len(token) > best_length:
+            best_match = (cat, sub)
+            best_length = len(token)
+    
+    if best_match:
+        params["category"] = best_match[0]
+        params["sub_category"] = best_match[1]
+
+    # PRIORITY 2: Colors
+    colors = {
+        "white": "white",
+        "black": "black",
+        "red": "red",
+        "blue": "blue",
+        "beige": "beige",
+        "brown": "brown",
+        "green": "green",
+        "nude": "nude",
+        "pink": "pink",
+        "grey": "grey",
+        "gray": "grey",
+        "dark": "black",
+        "light": "white",
+    }
+    
+    for color_word, color_val in colors.items():
+        if color_word in text_l:
+            params["color"] = color_val
+            break
+
+    # PRIORITY 3: Size (S, M, L, XL)
+    size_match = re.search(r"\b(xs|s|m|l|xl|xxl)\b", text_l)
+    if size_match:
+        params["size"] = size_match.group(1).upper()
+
+    # PRIORITY 4: Price
+    price_match = re.search(r"(?:under|below|less than|budget|max|below)\s+₹?([0-9,]+)", text_l)
+    if price_match:
+        try:
+            params["max_price"] = int(price_match.group(1).replace(",", ""))
+        except Exception:
+            pass
+
+    return params
 
 # ROUTER NODE
 async def router_node(state):
@@ -107,7 +221,11 @@ async def processor_node(state):
             if task_type == "RECOMMEND_PRODUCTS":
                 # Get recommendations based on user preferences
                 user_msg = state["messages"][-1]["content"]
-                recs = recommend_products(customer_id, params, user_msg)
+                # Merge heuristic-inferred params with router-provided params
+                # Router params take precedence when present
+                inferred = infer_params_from_text(user_msg)
+                merged_params = {**inferred, **(params or {})}
+                recs = recommend_products(customer_id, merged_params, user_msg)
                 results["recommendations"] = recs
                 results["recommendation_count"] = len(recs)
                 

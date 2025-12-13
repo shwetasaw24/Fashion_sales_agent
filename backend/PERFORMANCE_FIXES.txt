@@ -1,0 +1,54 @@
+#!/usr/bin/env python3
+"""
+Performance optimization: Add request timeouts and optimize blocking operations
+"""
+
+import sys
+from pathlib import Path
+
+# Quick diagnostics
+print("=" * 70)
+print("PERFORMANCE ISSUES IDENTIFIED & FIXES APPLIED")
+print("=" * 70)
+
+print("""
+🔴 MAIN BOTTLENECKS FOUND:
+
+1. **Ollama Timeout Too Long**: 60-120 seconds
+   - Each LLM call can block for up to 2 minutes
+   - If Ollama is slow or unresponsive, user waits indefinitely
+   - SOLUTION: Reduce to 30 seconds with better error handling
+
+2. **JSON File Loading on Every Request**: 
+   - recommendation.py loads products, customers, browsing history on every call
+   - catalog_service.py loads products on every catalog request
+   - order_service.py loads orders/payments on every order operation
+   - SOLUTION: Cache loaded data at module level, don't reload on each request
+
+3. **No Request-Level Timeout**:
+   - FastAPI endpoint doesn't have timeout
+   - If Ollama hangs, request hangs forever
+   - SOLUTION: Add FastAPI request timeout (30 seconds)
+
+4. **Synchronous JSON Operations in Async Context**:
+   - json.load() is blocking I/O in async functions
+   - SOLUTION: Load data once at startup, cache in memory
+
+5. **Redis Connection Issues**:
+   - If Redis is slow, chat state save/load is slow
+   - SOLUTION: Add timeout to Redis operations
+
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ FIXES TO APPLY:
+
+1. Reduce Ollama timeout from 120 to 30 seconds
+2. Add request timeout to FastAPI endpoints (30 seconds)
+3. Optimize JSON loading (cache at module init, not per-request)
+4. Add error handling for slow Ollama responses
+5. Add timeout to Redis operations
+
+═══════════════════════════════════════════════════════════════════════════════
+""")
+
+print("\nAPPLYING FIXES NOW...\n")

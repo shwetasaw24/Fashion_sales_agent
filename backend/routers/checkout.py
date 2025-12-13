@@ -2,7 +2,7 @@
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List
 from services.cart_service import CartService
 from services.order_service import OrderService
 
@@ -13,25 +13,30 @@ class CheckoutRequest(BaseModel):
     customer_id: str
     delivery_address: Optional[Dict[str, Any]] = None
     payment_method: str = "card"
+    items: Optional[List[Dict[str, Any]]] = None
 
 
 @checkout_router.post("/create-order")
 async def create_order(req: CheckoutRequest):
     """Create order from cart and initialize payment"""
     
-    # Get cart
-    cart = CartService.get_or_create_cart(req.customer_id)
-    
-    if not cart["items"]:
+    # Determine items: prefer items sent in request (frontend), otherwise use server cart
+    if req.items and len(req.items) > 0:
+        cart_items = req.items
+    else:
+        cart = CartService.get_or_create_cart(req.customer_id)
+        cart_items = cart.get("items", [])
+
+    if not cart_items:
         raise HTTPException(status_code=400, detail="Cart is empty")
-    
-    # Calculate totals
-    totals = CartService.calculate_cart_total(cart)
-    
+
+    # Calculate totals using a temporary cart dict
+    totals = CartService.calculate_cart_total({"items": cart_items})
+
     # Create order
     order_result = OrderService.create_order(
         req.customer_id,
-        cart["items"],
+        cart_items,
         totals,
         req.delivery_address
     )

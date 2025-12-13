@@ -21,7 +21,7 @@ async def call_llm(messages):
     )
     
     try:
-        async with httpx.AsyncClient(timeout=120) as client:
+        async with httpx.AsyncClient(timeout=30) as client:
             resp = await client.post(
                 f"{OLLAMA_URL}/api/generate",
                 json={

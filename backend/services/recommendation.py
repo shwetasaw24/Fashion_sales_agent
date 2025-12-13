@@ -108,7 +108,14 @@ def recommend_products(customer_id: str, params: Dict, user_message: str = "") -
         results = [p for p in results if p.get("gender", "").lower() == gender.lower()]
     
     if category:
-        results = [p for p in results if p.get("category", "").lower() == category.lower()]
+        # Try matching on category first, then sub_category as fallback
+        category_lower = category.lower()
+        results = [
+            p for p in results 
+            if p.get("category", "").lower() == category_lower or 
+               p.get("sub_category", "").lower() == category_lower or
+               any(category_lower in tag.lower() for tag in p.get("style_tags", []))
+        ]
     
     if style:
         results = [p for p in results if style.lower() in [s.lower() for s in p.get("style_tags", [])]]
@@ -197,15 +204,18 @@ def recommend_products(customer_id: str, params: Dict, user_message: str = "") -
     
     # Return top recommendations with rich data
     recommendations = []
-    for product in results[:5]:
-        # pick the first image for quick display
-        image = None
+    top_results = results[:5]
+
+    def _pick_image(product):
         imgs = product.get("images") or product.get("image") or []
         if isinstance(imgs, list) and len(imgs) > 0:
-            image = imgs[0]
-        elif isinstance(imgs, str):
-            image = imgs
+            return imgs[0]
+        if isinstance(imgs, str):
+            return imgs
+        return None
 
+    for product in top_results:
+        image = _pick_image(product)
         recommendations.append({
             "sku": product.get("sku"),
             "name": product.get("name"),
@@ -213,17 +223,84 @@ def recommend_products(customer_id: str, params: Dict, user_message: str = "") -
             "price": product.get("price"),
             "currency": product.get("currency", "INR"),
             "category": product.get("category"),
+            "sub_category": product.get("sub_category"),
             "style_tags": product.get("style_tags", []),
             "sizes": product.get("sizes", []),
             "colors_available": [product.get("base_color")] + [
                 c.get("color") for c in product.get("color_variants", [])
             ],
             "images": product.get("images", []),
-            "image": (product.get("images", [None])[0] if product.get("images") else None),
+            "image": image,
             "occasion": product.get("occasion", []),
             "rating": product.get("rating", 4.5),
-            "in_stock": True,  # Simplified
-            "image": image,
+            "in_stock": True,
+            "related": False,
         })
-    
+
+    # Add complementary / related products to act as cross-sell (items that go with the results)
+    # Strategy: find products not in top_results that share style_tags, occasion or brand
+    top_skus = {p.get("sku") for p in top_results}
+    related_candidates = []
+    # Build sets for quick comparison
+    top_style_tags = set()
+    top_occasions = set()
+    top_brands = set()
+    for p in top_results:
+        for t in p.get("style_tags", []):
+            top_style_tags.add(t.lower())
+        for o in p.get("occasion", []):
+            top_occasions.add(o.lower())
+        if p.get("brand"):
+            top_brands.add(str(p.get("brand")).lower())
+
+    for p in PRODUCTS:
+        sku = p.get("sku")
+        if not sku or sku in top_skus:
+            continue
+
+        score = 0
+        # style tag overlap
+        p_tags = {t.lower() for t in p.get("style_tags", [])}
+        score += len(top_style_tags & p_tags)
+
+        # occasion overlap
+        p_occs = {o.lower() for o in p.get("occasion", [])}
+        score += len(top_occasions & p_occs)
+
+        # brand boost
+        if str(p.get("brand", "")).lower() in top_brands:
+            score += 1
+
+        if score > 0:
+            related_candidates.append((score, p))
+
+    # sort by score desc then price proximity to average of top results
+    if related_candidates:
+        avg_price = (sum([p.get("price", 0) for p in top_results]) / len(top_results)) if top_results else 0
+        ranked = sorted(related_candidates, key=lambda x: (-x[0], abs(x[1].get("price", 0) - avg_price)))
+        # take up to 3 related items
+        related_to_add = [p for s, p in ranked][:3]
+        for product in related_to_add:
+            image = _pick_image(product)
+            recommendations.append({
+                "sku": product.get("sku"),
+                "name": product.get("name"),
+                "brand": product.get("brand"),
+                "price": product.get("price"),
+                "currency": product.get("currency", "INR"),
+                "category": product.get("category"),
+                "sub_category": product.get("sub_category"),
+                "style_tags": product.get("style_tags", []),
+                "sizes": product.get("sizes", []),
+                "colors_available": [product.get("base_color")] + [
+                    c.get("color") for c in product.get("color_variants", [])
+                ],
+                "images": product.get("images", []),
+                "image": image,
+                "occasion": product.get("occasion", []),
+                "rating": product.get("rating", 4.5),
+                "in_stock": True,
+                "related": True,
+            })
+
     return recommendations

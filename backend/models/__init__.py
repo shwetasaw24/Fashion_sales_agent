@@ -51,7 +51,7 @@ class InventoryItem(BaseModel):
 
 class CartItem(BaseModel):
     sku: str
-    quantity: int
+    quantity: int = 1
     size: Optional[str] = None
 
 

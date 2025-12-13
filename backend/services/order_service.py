@@ -72,7 +72,7 @@ class OrderService:
         return [o for o in ORDERS_DB if o["customer_id"] == customer_id]
     
     @staticmethod
-    def init_payment(order_id: str, payment_method: str = "card") -> Dict:
+    def init_payment(order_id: str, payment_method: str = "paypal") -> Dict:
         """Initialize payment for order"""
         
         order = OrderService.get_order(order_id)
@@ -94,14 +94,16 @@ class OrderService:
         
         PAYMENTS_DB.append(payment)
         
+        # For PayPal, we'll generate the actual PayPal order later via API
+        # This just initializes the local payment record
         return {
             "payment_id": payment_id,
             "order_id": order_id,
             "amount": order["total_amount"],
             "currency": "INR",
             "status": "initiated",
-            "payment_gateway_url": f"https://payment.example.com/checkout?payment_id={payment_id}",
-            "redirect_url": f"/payments/{payment_id}/status"
+            "method": payment_method,
+            "redirect_url": f"/api/payments/{payment_id}/paypal-create"
         }
     
     @staticmethod

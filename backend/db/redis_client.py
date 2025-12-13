@@ -22,7 +22,8 @@ else:
             host=os.getenv("REDIS_HOST", "localhost"),
             port=int(os.getenv("REDIS_PORT", 6379)),
             decode_responses=True,
-            socket_connect_timeout=5
+            socket_connect_timeout=5,  # 5 second timeout for connection
+            socket_timeout=5  # 5 second timeout for operations
         )
         # Test connection
         redis_client.ping()

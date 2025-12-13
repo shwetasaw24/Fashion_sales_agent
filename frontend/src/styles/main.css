@@ -362,3 +362,268 @@ body {
 .chat-input button:hover {
   background: var(--soft-black);
 }
+/* CHECKOUT MODAL STYLES */
+.checkout-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.checkout-modal {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.checkout-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px;
+  border-bottom: 1px solid var(--light-grey);
+}
+
+.checkout-header h2 {
+  font-size: 24px;
+  color: var(--black);
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--grey);
+  transition: color var(--transition);
+}
+
+.close-btn:hover {
+  color: var(--black);
+}
+
+.checkout-container {
+  padding: 30px;
+}
+
+.checkout-progress {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  gap: 10px;
+}
+
+.checkout-progress .step {
+  flex: 1;
+  padding: 10px;
+  text-align: center;
+  font-size: 12px;
+  background: var(--light-grey);
+  border-radius: 6px;
+  color: var(--grey);
+  transition: var(--transition);
+}
+
+.checkout-progress .step.active {
+  background: var(--accent);
+  color: white;
+  font-weight: 600;
+}
+
+.checkout-step {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.checkout-step h3 {
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: var(--black);
+}
+
+.checkout-items {
+  background: var(--cream);
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 20px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.checkout-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--light-grey);
+  font-size: 14px;
+}
+
+.checkout-item:last-child {
+  border-bottom: none;
+}
+
+.checkout-item .item-total {
+  font-weight: 600;
+  color: var(--black);
+}
+
+.checkout-totals {
+  background: var(--cream);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.total-row.grand-total {
+  border-top: 2px solid var(--accent);
+  padding-top: 12px;
+  margin-top: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--black);
+}
+
+.address-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.address-form input {
+  padding: 12px 15px;
+  border: 1px solid var(--light-grey);
+  border-radius: 8px;
+  font-size: 14px;
+  transition: var(--transition);
+}
+
+.address-form input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(197, 176, 143, 0.1);
+}
+
+.payment-amount {
+  background: var(--cream);
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 16px;
+}
+
+.payment-amount strong {
+  color: var(--accent);
+  font-size: 20px;
+}
+
+.paypal-container {
+  margin-bottom: 20px;
+  min-height: 60px;
+}
+
+.checkout-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.modal-checkout-btn,
+.modal-back-btn {
+  flex: 1;
+  padding: 14px 22px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.modal-checkout-btn {
+  background: var(--black);
+  color: white;
+}
+
+.modal-checkout-btn:hover:not(:disabled) {
+  background: var(--soft-black);
+}
+
+.modal-checkout-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.modal-back-btn {
+  background: var(--light-grey);
+  color: var(--black);
+}
+
+.modal-back-btn:hover {
+  background: var(--grey);
+  color: white;
+}
+
+.success-step {
+  text-align: center;
+}
+
+.success-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  background: #4CAF50;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+}
+
+.success-details {
+  background: var(--cream);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px 0;
+  text-align: left;
+}
+
+.success-details p {
+  padding: 8px 0;
+  font-size: 14px;
+}
+
+.success-details strong {
+  color: var(--accent);
+}

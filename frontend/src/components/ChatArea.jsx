@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeSanitize from "rehype-sanitize";
+import Checkout from "./Checkout";
 
 const API_BASE_URL = "http://localhost:8000";
 
@@ -11,6 +12,7 @@ export default function ChatArea({ sessions, currentChat, updateChat }) {
   const [cart, setCart] = useState([]);
   const [discountInfo, setDiscountInfo] = useState(null);
   const [showCart, setShowCart] = useState(false);
+  const [showCheckout, setShowCheckout] = useState(false);
   const [customerId, setCustomerId] = useState(() => {
     try {
       const saved = localStorage.getItem("fs_customer_id");
@@ -204,34 +206,48 @@ export default function ChatArea({ sessions, currentChat, updateChat }) {
         </div>
       </header>
 
-      {showCart && (
-        <section className="cart-panel">
+      <section className={`cart-panel ${showCart ? "open" : ""}`} aria-hidden={!showCart}>
+        <div className="cart-header">
           <h3>Shopping Cart</h3>
-          {cart.length === 0 ? (
-            <p>Cart is empty</p>
-          ) : (
-            <div className="cart-items">
-              {cart.map((item, idx) => (
-                <div key={idx} className="cart-item">
-                  <span>{item.name} - ₹{item.price} x {item.quantity}</span>
+          <button className="cart-close" onClick={() => setShowCart(false)}>✕</button>
+        </div>
+        {cart.length === 0 ? (
+          <p className="cart-empty">Cart is empty</p>
+        ) : (
+          <div className="cart-items">
+            {cart.map((item, idx) => (
+              <div key={idx} className="cart-item">
+                <span>{item.name} - ₹{item.price} x {item.quantity}</span>
+              </div>
+            ))}
+            <div className="cart-total">
+              <strong>Total: ₹{cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)}</strong>
+              {discountInfo && discountInfo.eligible && (
+                <div className="discount-summary">
+                  <div>Discount: ₹{discountInfo.discount_amount} ({discountInfo.discount_percent}%)</div>
+                  <div>Payable: ₹{discountInfo.payable_after}</div>
                 </div>
-              ))}
-              <div className="cart-total">
-                <strong>Total: ₹{cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)}</strong>
-                {discountInfo && discountInfo.eligible && (
-                  <div className="discount-summary">
-                    <div>Discount: ₹{discountInfo.discount_amount} ({discountInfo.discount_percent}%)</div>
-                    <div>Payable: ₹{discountInfo.payable_after}</div>
-                  </div>
-                )}
-              </div>
-              <div className="cart-actions">
-                <button className="apply-discount-btn" onClick={applyDiscount}>Apply Discount</button>
-                <button className="checkout-btn" onClick={() => alert("Checkout feature coming soon!")}>Checkout</button>
-              </div>
+              )}
             </div>
-          )}
-        </section>
+            <div className="cart-actions">
+              <button className="apply-discount-btn" onClick={applyDiscount}>Apply Discount</button>
+              <button className="checkout-btn" onClick={() => setShowCheckout(true)}>Checkout</button>
+            </div>
+          </div>
+        )}
+      </section>
+
+      {showCheckout && (
+        <Checkout
+          cart={cart}
+          customerId={customerId}
+          onClose={() => setShowCheckout(false)}
+          onCheckoutComplete={() => {
+            setCart([]);
+            setShowCheckout(false);
+            setShowCart(false);
+          }}
+        />
       )}
 
       <section className="chat-history">
