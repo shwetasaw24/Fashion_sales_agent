@@ -112,6 +112,35 @@ taskkill /IM python.exe /F
 ### Error: Redis connection failed
 This is expected - set `USE_FAKE_REDIS=true` (already done above)
 
+### Optional: Enable MongoDB for persistent carts
+
+To persist cart information into MongoDB (recommended for production):
+
+1. Start a local MongoDB instance (recommended via Docker):
+
+```powershell
+docker run -d -p 27017:27017 --name mongodb mongo:6.0
+```
+
+2. Set environment variables and install `pymongo`:
+
+```powershell
+set MONGO_URI=mongodb://localhost:27017
+set MONGO_DB=fashion_agent_db
+pip install pymongo
+```
+
+3. Restart the backend and cart items will be persisted in the `carts` collection in MongoDB.
+
+4. Use `mongo` or `mongosh` to verify:
+
+```powershell
+mongosh
+use fashion_agent_db
+db.carts.find({"customer_id": "test_customer"}).pretty()
+```
+
+
 ---
 
 ## If Frontend Doesn't Load

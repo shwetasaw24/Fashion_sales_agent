@@ -156,23 +156,19 @@ Return ONLY a JSON response in this exact format, with NO other text:
 # --------------------------------------------------------
 
 async def compose_reply(user_message, ctx, task_results):
-    system_prompt = """You are a helpful fashion shopping assistant.
-Create a SHORT response (1-2 sentences) about products found. Be concise and friendly."""
 
-<<<<<<< HEAD
+    system_prompt = """You are a helpful fashion shopping assistant.
+Create a SHORT response (1-2 sentences) about products found. Be concise and friendly.
 Respond in Markdown. Use short, helpful sentences (1-3) and use bullet lists when listing multiple items. Use bold for key items (product name or price) and include a short actionable next step (e.g., 'Add to cart' or 'View images').
 Keep replies concise and friendly."""
 
-    results_text = json.dumps(task_results, indent=2, default=str)
-=======
     # Prepare results summary
     product_count = len(task_results.get("RECOMMEND_PRODUCTS", []))
     product_names = []
     if task_results.get("RECOMMEND_PRODUCTS"):
         for prod in task_results["RECOMMEND_PRODUCTS"][:3]:
             product_names.append(prod.get("name", "Product"))
->>>>>>> 6db1631465f43accdbbe288418bd6fda45530af1
-    
+
     results_summary = f"Found {product_count} products."
     if product_names:
         results_summary += f" Top: {', '.join(product_names)}"

@@ -28,15 +28,9 @@ async def handle_message(req: SalesMessageRequest) -> Dict[str, Any]:
     reply, updated_ctx, task_results = await process_message(req, ctx)
     save_session(updated_ctx)
 
-<<<<<<< HEAD
-    # Extract recommendations if present
-    recommendations = task_results.get("RECOMMEND_PRODUCTS") if task_results else []
-
-    return {"reply": reply, "recommendations": recommendations}
-=======
     # Include recommendations (if any) and intent in the response for frontend
     response = {"reply": reply}
-    if task_results.get("RECOMMEND_PRODUCTS"):
+    if task_results and task_results.get("RECOMMEND_PRODUCTS"):
         recs = task_results.get("RECOMMEND_PRODUCTS")
         # Enrich recommendations with inventory availability
         enriched = []
@@ -59,4 +53,3 @@ async def handle_message(req: SalesMessageRequest) -> Dict[str, Any]:
         response["intent"] = updated_ctx.intent
 
     return response
->>>>>>> 6db1631465f43accdbbe288418bd6fda45530af1

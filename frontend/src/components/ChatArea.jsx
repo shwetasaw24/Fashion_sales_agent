@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeSanitize from "rehype-sanitize";
@@ -10,7 +10,33 @@ export default function ChatArea({ sessions, currentChat, updateChat }) {
   const [loading, setLoading] = useState(false);
   const [cart, setCart] = useState([]);
   const [showCart, setShowCart] = useState(false);
-  const [customerId, setCustomerId] = useState("customer_" + Date.now());
+  const [customerId, setCustomerId] = useState(() => {
+    try {
+      const saved = localStorage.getItem("fs_customer_id");
+      if (saved) return saved;
+      const id = "customer_" + Date.now();
+      localStorage.setItem("fs_customer_id", id);
+      return id;
+    } catch (e) {
+      return "customer_" + Date.now();
+    }
+  });
+
+  // Load cart from backend on mount
+  useEffect(() => {
+    const loadCart = async () => {
+      try {
+        const url = `${API_BASE_URL}/api/cart/${customerId}`;
+        const res = await fetch(url);
+        if (!res.ok) return;
+        const data = await res.json();
+        setCart(data.items || []);
+      } catch (err) {
+        console.error("Error loading cart:", err);
+      }
+    };
+    loadCart();
+  }, [customerId]);
 
   const active = sessions.find((s) => s.id === currentChat);
   const messages = active?.messages || [];
@@ -121,8 +147,13 @@ export default function ChatArea({ sessions, currentChat, updateChat }) {
       
       const result = await res.json();
       console.log("✅ Added to cart:", result);
-      
-      setCart([...cart, { ...product, quantity: 1 }]);
+      // Update UI cart from server response if available
+      if (result && result.cart) {
+        setCart(result.cart.items || []);
+      } else {
+        // fall back to optimistic update
+        setCart([...cart, { ...product, quantity: 1 }]);
+      }
       alert(`${product.name} added to cart!`);
     } catch (err) {
       console.error("❌ Add to cart error:", err);
