@@ -26,13 +26,14 @@ async def router_node(state):
     prompt = f"""
 You are an AI sales router agent for a fashion e-commerce platform.
 
-Allowed task types ONLY:
+    Allowed task types ONLY:
 - RECOMMEND_PRODUCTS (analyze user's style/budget preferences)
 - ADD_TO_CART (user wants to add specific product)
 - VIEW_CART (show cart summary)
 - CREATE_ORDER (checkout)
 - PROCESS_PAYMENT (pay for order)
 - TRACK_ORDER (track existing order)
+    - APPLY_DISCOUNT (calculate discounts available for current order based on past orders)
 
 Extract parameters from user message and output STRICT JSON ONLY:
 
@@ -149,6 +150,13 @@ async def processor_node(state):
                 if order_id:
                     order = OrderService.get_order(order_id)
                     results["order_details"] = order or {"error": "Order not found"}
+            elif task_type == "APPLY_DISCOUNT":
+                # Determine if a previous-order based discount applies
+                from services.loyalty_service import check_discount_eligibility
+                cart = CartService.get_or_create_cart(customer_id)
+                items = cart.get("items", [])
+                discount_result = check_discount_eligibility(customer_id, items)
+                results["discount"] = discount_result
         
         except Exception as e:
             results[f"error_{task_type}"] = str(e)
@@ -172,6 +180,7 @@ async def reply_node(state):
     cart = results.get("cart", {})
     order = results.get("order", {})
     payment = results.get("payment", {})
+    discount = results.get("discount", {})
     
     # Build context for AI response
     context = f"""
@@ -193,6 +202,8 @@ User Intent: {intent}
     
     if order.get("order_id"):
         context += f"\n\nOrder Created: {order.get('order_id')}\nAmount: ₹{order.get('total_amount')}"
+    if discount and discount.get("eligible"):
+        context += f"\n\nDiscount Applied: {discount.get('discount_percent')}% - Savings: ₹{discount.get('discount_amount')} (Payable: ₹{discount.get('payable_after')})"
     
     if payment.get("payment_id"):
         context += f"\n\nPayment Link: {payment.get('payment_gateway_url')}"

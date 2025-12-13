@@ -74,6 +74,12 @@ Replace `customer_XXXX` with the value in your localStorage or copy it from netw
 
 - GET `/api/cart/{customer_id}` — Returns cart summary including `items` and `totals`.
 
+### Discounting Agent API
+- POST `/api/loyalty/discount-check` — Check for discounts unlocked by previous orders.
+  - Payload: `{ "customer_id": string, "items": [{ "sku": string, "quantity": number }] }`
+  - Response: `{ eligible: bool, discount_percent, discount_amount, total_before, payable_after, message }`
+  - The frontend provides an `Apply Discount` button in the cart which posts to this endpoint.
+
 ## Notes
 - The backend will gracefully fallback to an in-memory cart when `pymongo` is not installed or Mongo is unavailable. When `pymongo` is not installed you will see: `pymongo not installed; MongoDB features disabled` in server stderr.
 - The `backend/db/mongo_client.py` wrapper returns `None` for `client` and `db` when `pymongo` isn't available. `cart_service` checks `MONGO_COLLECTION` before performing DB operations.

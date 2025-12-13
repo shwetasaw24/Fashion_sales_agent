@@ -1,0 +1,57 @@
+{
+  "loyalty_program": {
+    "program_name": "StyleClub Rewards",
+    "tiers": [
+      {
+        "tier_name": "Bronze",
+        "min_spend_yearly": 0,
+        "benefits": {
+          "earn_rate": "1 point per ₹1",
+          "reward_unlock": {
+            "threshold": 2000,
+            "reward_type": "DISCOUNT_COUPON",
+            "discount_value": "5%",
+            "valid_for_days": 7,
+            "description": "Unlock 5% off when you spend ₹2000 in total purchases."
+          }
+        }
+      },
+      {
+        "tier_name": "Silver",
+        "min_spend_yearly": 10000,
+        "benefits": {
+          "earn_rate": "1.5 points per ₹1",
+          "reward_unlock": {
+            "threshold": 5000,
+            "reward_type": "DISCOUNT_COUPON",
+            "discount_value": "10%",
+            "valid_for_days": 5,
+            "description": "Spend ₹5000 after entering Silver tier to unlock a 10% discount coupon."
+          }
+        }
+      },
+      {
+        "tier_name": "Gold",
+        "min_spend_yearly": 25000,
+        "benefits": {
+          "earn_rate": "2 points per ₹1",
+          "reward_unlock": {
+            "threshold": 8000,
+            "reward_type": "DISCOUNT_COUPON",
+            "discount_value": "15%",
+            "valid_for_days": 2,
+            "description": "Unlock a premium 15% off coupon when you purchase items worth ₹8000."
+          }
+        }
+      }
+    ],
+
+    "reward_rules": {
+      "coupon_conditions": {
+        "minimum_order_value": 999,
+        "applicable_categories": ["Women Wear", "Footwear", "Accessories"],
+        "exclusions": ["Luxury", "Gift Cards"]
+      }
+    }
+  }
+}

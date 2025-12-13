@@ -9,6 +9,7 @@ export default function ChatArea({ sessions, currentChat, updateChat }) {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [cart, setCart] = useState([]);
+  const [discountInfo, setDiscountInfo] = useState(null);
   const [showCart, setShowCart] = useState(false);
   const [customerId, setCustomerId] = useState(() => {
     try {
@@ -161,6 +162,37 @@ export default function ChatArea({ sessions, currentChat, updateChat }) {
     }
   };
 
+  const applyDiscount = async () => {
+    try {
+      if (!cart || cart.length === 0) {
+        alert("Cart is empty");
+        return;
+      }
+      const url = `${API_BASE_URL}/api/loyalty/discount-check`;
+      const payload = { customer_id: customerId, items: cart.map(i => ({ sku: i.sku, quantity: i.quantity })) };
+      console.log("Checking discount for cart:", payload);
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || "Discount check failed");
+      }
+      const data = await res.json();
+      setDiscountInfo(data);
+      if (data.eligible) {
+        alert(`Discount applied: ₹${data.discount_amount} (${data.discount_percent}%), Payable: ₹${data.payable_after}`);
+      } else {
+        alert(data.message || "No discount applicable");
+      }
+    } catch (err) {
+      console.error("Error applying discount:", err);
+      alert(`Error applying discount: ${err.message}`);
+    }
+  };
+
   return (
     <main className="chat-area">
       <header className="chat-header">
@@ -186,8 +218,17 @@ export default function ChatArea({ sessions, currentChat, updateChat }) {
               ))}
               <div className="cart-total">
                 <strong>Total: ₹{cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)}</strong>
+                {discountInfo && discountInfo.eligible && (
+                  <div className="discount-summary">
+                    <div>Discount: ₹{discountInfo.discount_amount} ({discountInfo.discount_percent}%)</div>
+                    <div>Payable: ₹{discountInfo.payable_after}</div>
+                  </div>
+                )}
               </div>
-              <button className="checkout-btn" onClick={() => alert("Checkout feature coming soon!")}>Checkout</button>
+              <div className="cart-actions">
+                <button className="apply-discount-btn" onClick={applyDiscount}>Apply Discount</button>
+                <button className="checkout-btn" onClick={() => alert("Checkout feature coming soon!")}>Checkout</button>
+              </div>
             </div>
           )}
         </section>
