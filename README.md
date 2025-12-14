@@ -80,6 +80,6 @@ License
 - Demo / educational project
 
 #Contributors
-- Shweta Saw
-- Anu Saha
+- Shweta Saw(https://github.com/shwetasaw24/)
+- Anu Saha(https://github.com/AnuSaha545/)
 - Aditi Joshi(https://github.com/aditijoshi019)
