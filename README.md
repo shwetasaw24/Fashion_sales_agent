@@ -79,7 +79,7 @@ Contributions
 License
 - Demo / educational project
 
-[Author]
-- Shweta saw
+#Contributors
+- Shweta Saw
 - Anu Saha
-- Aditi Joshi
+- Aditi Joshi(https://github.com/aditijoshi019)
